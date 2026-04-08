@@ -344,7 +344,7 @@ const REPO_OWNER = 'waluigisforkball';
 const REPO_NAME  = 'waluigisforkball.github.io';
 const DATA_FILE  = 'data.json';
 const AV  = 'GC12FPL30GNZKUD8';
-const FH  = 'KHUcp_SpfC9IXnOHmDbzOLXm7_xrMCwL';
+const TD  = '5faf4ae7e66f4d328e0177452225a6f4';
 const TOK_KEY = 'gh_pat_v1';
 
 // ── Defaults (first load if no data.json exists) ──────────
@@ -429,6 +429,14 @@ async function ghPut(data) {
 
 // ── Load data ─────────────────────────────────────────────
 async function loadData() {
+  if (!hasToken()) {
+    // No token yet — use localStorage or defaults, prompt user to set up sync
+    const local = localStorage.getItem('portfolio_local');
+    positions = local ? JSON.parse(local) : JSON.parse(JSON.stringify(DEFAULTS));
+    setSyncStatus('error', 'No token — tap ⚙ GitHub Sync to enable');
+    renderAll();
+    return;
+  }
   setSyncStatus('syncing', 'Loading…');
   try {
     const data = await ghGet();
@@ -437,11 +445,10 @@ async function loadData() {
       setSyncStatus('synced', 'Loaded from GitHub');
     } else {
       positions = JSON.parse(JSON.stringify(DEFAULTS));
-      setSyncStatus(hasToken() ? 'syncing' : 'error', hasToken() ? 'First run — saving defaults…' : 'No token — using defaults');
-      if (hasToken()) await ghPut(positions);
+      setSyncStatus('syncing', 'First run — saving defaults…');
+      await ghPut(positions);
     }
   } catch (e) {
-    // Fallback to localStorage
     const local = localStorage.getItem('portfolio_local');
     positions = local ? JSON.parse(local) : JSON.parse(JSON.stringify(DEFAULTS));
     setSyncStatus('error', 'GitHub unavailable — local only');
@@ -617,11 +624,13 @@ function addPos() {
 }
 
 // ── Price fetch ───────────────────────────────────────────
-async function fetchFH(ticker) {
-  const r = await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${FH}`);
+async function fetchTD(ticker) {
+  const r = await fetch(`https://api.twelvedata.com/price?symbol=${ticker}&apikey=${TD}`);
   const d = await r.json();
-  if (!d?.c || d.c === 0) throw new Error('No FH price');
-  return { price: d.c, source: 'Finnhub' };
+  if (d?.status === 'error' || !d?.price) throw new Error('No TD price');
+  const p = parseFloat(d.price);
+  if (isNaN(p)) throw new Error('No TD price');
+  return { price: p, source: 'Twelve Data' };
 }
 
 async function fetchAV(ticker) {
@@ -634,7 +643,7 @@ async function fetchAV(ticker) {
 }
 
 async function fetchPrice(ticker) {
-  try { return await fetchFH(ticker); }
+  try { return await fetchTD(ticker); }
   catch { return await fetchAV(ticker); }
 }
 
