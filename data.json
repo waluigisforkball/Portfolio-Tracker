@@ -38,20 +38,6 @@
     "closedDate": "Apr 8, 2026"
   },
   {
-    "id": "d2",
-    "name": "US Global Jets ETF",
-    "ticker": "JETS",
-    "account": "Merrill Edge IRA",
-    "shares": 1,
-    "costBasis": 0,
-    "currentPrice": 10,
-    "type": "stock",
-    "addedDate": "Apr 7, 2026",
-    "closed": true,
-    "closedPrice": 10,
-    "closedDate": "Apr 8, 2026"
-  },
-  {
     "id": "d5",
     "name": "CCL $27.50 Call 4/24",
     "ticker": null,
