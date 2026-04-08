@@ -19,331 +19,289 @@
   .card.gain { border-left-color: #3B6D11; }
   .card.loss { border-left-color: #A32D2D; }
   .card.flat { border-left-color: #b4b2a9; }
+  .card.closed-card { border-left-color: #73726c; opacity: 0.75; }
   .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
   .card-name { font-size: 15px; font-weight: 500; }
   .card-sub { font-size: 11px; color: #73726c; margin-top: 2px; }
-  .card-pnl { text-align: right; }
   .card-pnl-val { font-size: 15px; font-weight: 500; }
   .card-pnl-pct { font-size: 12px; margin-top: 2px; }
   .card-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
   .stat-label { font-size: 11px; color: #73726c; }
   .stat-val { font-size: 12px; color: #444441; margin-top: 2px; }
-  .remove-btn { font-size: 11px; color: #A32D2D; background: none; border: none; cursor: pointer; padding: 0; margin-top: 8px; }
+  .card-actions { display: flex; gap: 10px; margin-top: 10px; align-items: center; flex-wrap: wrap; }
+  .remove-btn { font-size: 11px; color: #A32D2D; background: none; border: none; cursor: pointer; padding: 0; }
+  .close-btn { font-size: 11px; color: #73726c; background: none; border: none; cursor: pointer; padding: 0; }
+  .manual-row { display: flex; gap: 6px; align-items: center; }
+  .manual-input { font-size: 12px; padding: 4px 8px; border-radius: 6px; border: 0.5px solid rgba(0,0,0,0.2); width: 100px; background: #fff; color: #1a1a18; }
+  .manual-btn { font-size: 11px; padding: 4px 10px; border-radius: 6px; border: 0.5px solid rgba(0,0,0,0.2); background: #fff; cursor: pointer; color: #1a1a18; }
+  .manual-btn:hover { background: #f5f5f0; }
   .section { background: #fff; border-radius: 12px; border: 0.5px solid rgba(0,0,0,0.1); padding: 14px; margin-bottom: 16px; }
   .section-title { font-size: 13px; font-weight: 500; margin-bottom: 12px; color: #3d3d3a; }
   .form-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end; }
   .form-group { display: flex; flex-direction: column; gap: 4px; }
   .form-group label { font-size: 11px; color: #73726c; }
-  input, select { font-size: 13px; padding: 8px 10px; border-radius: 8px; border: 0.5px solid rgba(0,0,0,0.2); background: #fff; color: #1a1a18; outline: none; }
-  input:focus, select:focus { border-color: rgba(0,0,0,0.4); }
-  .input-sm { width: 90px; }
-  .input-md { width: 120px; }
-  .input-lg { width: 160px; }
+  input[type="text"], input[type="number"], select { font-size: 13px; padding: 8px 10px; border-radius: 8px; border: 0.5px solid rgba(0,0,0,0.2); background: #fff; color: #1a1a18; outline: none; }
+  .input-sm { width: 90px; } .input-md { width: 120px; } .input-lg { width: 160px; }
   button { font-size: 13px; padding: 8px 16px; border-radius: 8px; border: 0.5px solid rgba(0,0,0,0.2); background: #fff; color: #1a1a18; cursor: pointer; }
   button:hover { background: #f5f5f0; }
-  button:active { transform: scale(0.98); }
   .btn-primary { background: #1a1a18; color: #fff; border-color: #1a1a18; }
   .btn-primary:hover { background: #3d3d3a; }
-  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
-  .toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
+  .toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
   .status { font-size: 12px; color: #73726c; }
   .error { font-size: 12px; color: #A32D2D; background: #FCEBEB; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; display: none; }
-  .positions-label { font-size: 12px; color: #73726c; margin-bottom: 8px; }
-  .empty-state { font-size: 13px; color: #73726c; text-align: center; padding: 24px; }
-  .tag { font-size: 10px; padding: 2px 7px; border-radius: 99px; background: #f1efe8; color: #5f5e5a; margin-left: 6px; vertical-align: middle; }
+  .tag { font-size: 10px; padding: 2px 7px; border-radius: 99px; background: #f1efe8; color: #5f5e5a; margin-left: 4px; vertical-align: middle; }
   .tag.opt { background: #FAEEDA; color: #854F0B; }
   .tag.rh { background: #E6F1FB; color: #185FA5; }
   .tag.ml { background: #EAF3DE; color: #3B6D11; }
-  .opt-note { font-size: 11px; color: #73726c; margin-top: 3px; }
-  .divider { border: none; border-top: 0.5px solid rgba(0,0,0,0.08); margin: 12px 0; }
+  .tag.ctag { background: #f1efe8; color: #73726c; }
+  .divider { border: none; border-top: 0.5px solid rgba(0,0,0,0.08); margin: 20px 0; }
+  .section-label { font-size: 12px; color: #73726c; margin-bottom: 8px; }
+  .empty { font-size: 13px; color: #73726c; text-align: center; padding: 24px; }
 </style>
 </head>
 <body>
 
 <h1>Portfolio tracker</h1>
-<p class="subtitle">Live prices via Alpha Vantage &middot; Positions saved locally</p>
+<p class="subtitle">Finnhub live prices &middot; Alpha Vantage fallback &middot; Saves locally</p>
 
 <div class="summary-grid">
-  <div class="metric"><div class="metric-label">Total invested</div><div class="metric-val" id="t-invested">—</div></div>
-  <div class="metric"><div class="metric-label">Current value</div><div class="metric-val" id="t-value">—</div></div>
+  <div class="metric"><div class="metric-label">Total invested</div><div class="metric-val" id="t-inv">—</div></div>
+  <div class="metric"><div class="metric-label">Current value</div><div class="metric-val" id="t-val">—</div></div>
   <div class="metric"><div class="metric-label">Gain / loss</div><div class="metric-val" id="t-pnl">—</div></div>
   <div class="metric"><div class="metric-label">Return</div><div class="metric-val" id="t-pct">—</div></div>
 </div>
 
 <div class="toolbar">
-  <button class="btn-primary" id="refresh-btn" onclick="fetchAllPrices()">Refresh live prices</button>
-  <span class="status" id="status-text">Not yet refreshed</span>
+  <button class="btn-primary" id="rbtn" onclick="fetchAll()">Refresh live prices</button>
+  <span class="status" id="stext">Not yet refreshed</span>
+</div>
+<div class="error" id="ebox"></div>
+
+<div class="section-label" id="pos-label">Open positions</div>
+<div id="open-list"></div>
+
+<div id="closed-wrap" style="display:none; margin-top:16px;">
+  <div class="section-label">Closed positions</div>
+  <div id="closed-list"></div>
 </div>
 
-<div class="error" id="error-box"></div>
-
-<div id="positions-wrap">
-  <div class="positions-label" id="pos-label">Your positions</div>
-  <div id="positions-list"></div>
-</div>
-
-<hr class="divider" style="margin: 20px 0;">
+<hr class="divider">
 
 <div class="section">
   <div class="section-title">Add a position</div>
   <div class="form-row">
-    <div class="form-group">
-      <label>Ticker</label>
-      <input class="input-sm" id="add-ticker" type="text" placeholder="e.g. AAPL" maxlength="8" />
+    <div class="form-group"><label>Ticker</label><input class="input-sm" id="a-tick" type="text" placeholder="AAPL" maxlength="8"/></div>
+    <div class="form-group"><label>Name</label><input class="input-lg" id="a-name" type="text" placeholder="Apple Inc."/></div>
+    <div class="form-group"><label>Shares</label><input class="input-sm" id="a-shares" type="number" step="0.0001" placeholder="0"/></div>
+    <div class="form-group"><label>Cost / share</label><input class="input-sm" id="a-cost" type="number" step="0.01" placeholder="0.00"/></div>
+    <div class="form-group"><label>Account</label>
+      <select id="a-acct"><option>Merrill Edge IRA</option><option>Robinhood</option><option>Other</option></select>
     </div>
-    <div class="form-group">
-      <label>Name</label>
-      <input class="input-lg" id="add-name" type="text" placeholder="e.g. Apple Inc." />
+    <div class="form-group"><label>Type</label>
+      <select id="a-type"><option value="stock">Stock / ETF</option><option value="option">Option (manual)</option></select>
     </div>
-    <div class="form-group">
-      <label>Shares</label>
-      <input class="input-sm" id="add-shares" type="number" step="0.0001" placeholder="0.00" />
-    </div>
-    <div class="form-group">
-      <label>Cost basis / share</label>
-      <input class="input-sm" id="add-cost" type="number" step="0.01" placeholder="$0.00" />
-    </div>
-    <div class="form-group">
-      <label>Account</label>
-      <select id="add-account">
-        <option>Merrill Edge IRA</option>
-        <option>Robinhood</option>
-        <option>Other</option>
-      </select>
-    </div>
-    <div class="form-group">
-      <label>Type</label>
-      <select id="add-type">
-        <option value="stock">Stock / ETF</option>
-        <option value="option">Option (manual price)</option>
-      </select>
-    </div>
-    <div class="form-group" style="justify-content: flex-end;">
-      <button class="btn-primary" onclick="addPosition()">Add</button>
-    </div>
+    <div class="form-group" style="justify-content:flex-end;"><button class="btn-primary" onclick="addPos()">Add</button></div>
   </div>
-  <div id="add-error" style="font-size:12px;color:#A32D2D;margin-top:8px;display:none;"></div>
-</div>
-
-<div class="section" id="opt-section" style="display:none;">
-  <div class="section-title">Update option prices manually</div>
-  <div id="opt-inputs"></div>
+  <div id="a-err" style="font-size:12px;color:#A32D2D;margin-top:8px;display:none;"></div>
 </div>
 
 <script>
-const API_KEY = 'GC12FPL30GNZKUD8';
-const STORAGE_KEY = 'portfolio_positions_v2';
+const AV = 'GC12FPL30GNZKUD8';
+const FH = 'KHUcp_SpfC9IXnOHmDbzOLXm7_xrMCwL';
+const SK = 'portfolio_v4';
 
-const DEFAULT_POSITIONS = [
-  { id: 'DAL', name: 'Delta Air Lines', ticker: 'DAL', account: 'Merrill Edge IRA', shares: 4, costBasis: 65.94, currentPrice: 65.94, type: 'stock', addedDate: 'Apr 7, 2026' },
-  { id: 'JETS', name: 'US Global Jets ETF', ticker: 'JETS', account: 'Merrill Edge IRA', shares: 14, costBasis: 24.67, currentPrice: 24.67, type: 'stock', addedDate: 'Apr 7, 2026' },
-  { id: 'IVV', name: 'iShares Core S&P 500', ticker: 'IVV', account: 'Merrill Edge IRA', shares: 2, costBasis: 659.67, currentPrice: 659.67, type: 'stock', addedDate: 'Apr 7, 2026' },
-  { id: 'QQQ', name: 'Invesco QQQ', ticker: 'QQQ', account: 'Robinhood', shares: 0.342393, costBasis: 584.12, currentPrice: 584.12, type: 'stock', addedDate: 'Apr 7, 2026' },
-  { id: 'CCL_OPT', name: 'CCL $27.50 Call 4/24', ticker: null, account: 'Robinhood', shares: 1, costBasis: 48.00, currentPrice: 48.00, type: 'option', addedDate: 'Apr 7, 2026' }
+const DEFAULTS = [
+  { id:'d1', name:'Delta Air Lines', ticker:'DAL', account:'Merrill Edge IRA', shares:4, costBasis:65.94, currentPrice:69.67, type:'stock', addedDate:'Apr 7, 2026', closed:false },
+  { id:'d2', name:'US Global Jets ETF', ticker:'JETS', account:'Merrill Edge IRA', shares:14, costBasis:24.67, currentPrice:26.52, type:'stock', addedDate:'Apr 7, 2026', closed:false },
+  { id:'d3', name:'iShares Core S&P 500', ticker:'IVV', account:'Merrill Edge IRA', shares:2, costBasis:659.67, currentPrice:679.14, type:'stock', addedDate:'Apr 7, 2026', closed:false },
+  { id:'d4', name:'Invesco QQQ', ticker:'QQQ', account:'Robinhood', shares:0.342393, costBasis:584.12, currentPrice:588.59, type:'stock', addedDate:'Apr 7, 2026', closed:false },
+  { id:'d5', name:'CCL $27.50 Call 4/24', ticker:null, account:'Robinhood', shares:1, costBasis:48.00, currentPrice:150.96, type:'option', addedDate:'Apr 7, 2026', closed:true, closedPrice:150.96, closedDate:'Apr 8, 2026' }
 ];
 
-function loadPositions() {
-  try {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    return saved ? JSON.parse(saved) : DEFAULT_POSITIONS;
-  } catch { return DEFAULT_POSITIONS; }
-}
+function load() { try { const s=localStorage.getItem(SK); return s?JSON.parse(s):DEFAULTS; } catch { return DEFAULTS; } }
+function save() { try { localStorage.setItem(SK, JSON.stringify(positions)); } catch {} }
 
-function savePositions(positions) {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(positions)); } catch {}
-}
+let positions = load();
 
-let positions = loadPositions();
-
-function fmt(n) { return '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
-function fmtSigned(n) { return (n >= 0 ? '+$' : '-$') + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
-function fmtPct(n) { return (n >= 0 ? '+' : '') + n.toFixed(2) + '%'; }
-function fmtShares(p) {
-  if (p.type === 'option') return '1 contract';
-  return p.shares % 1 !== 0 ? p.shares.toFixed(4) + ' sh' : p.shares + ' sh';
-}
+const fmt = n => '$'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtS = n => (n>=0?'+$':'-$')+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+const fmtP = n => (n>=0?'+':'')+n.toFixed(2)+'%';
+const fmtSh = p => p.type==='option'?'1 contract':p.shares%1!==0?p.shares.toFixed(4)+' sh':p.shares+' sh';
 
 function renderAll() {
-  const list = document.getElementById('positions-list');
-  if (positions.length === 0) {
-    list.innerHTML = '<div class="empty-state">No positions yet. Add one below.</div>';
-    document.getElementById('t-invested').textContent = '—';
-    document.getElementById('t-value').textContent = '—';
-    document.getElementById('t-pnl').textContent = '—';
-    document.getElementById('t-pct').textContent = '—';
-    return;
-  }
+  const open = positions.filter(p=>!p.closed);
+  const closed = positions.filter(p=>p.closed);
+  let tInv=0, tVal=0;
 
-  let totalInvested = 0, totalValue = 0;
+  document.getElementById('open-list').innerHTML = open.length===0
+    ? '<div class="empty">No open positions. Add one below.</div>'
+    : open.map(p => {
+        const idx = positions.indexOf(p);
+        const inv = p.type==='option'?p.costBasis:p.shares*p.costBasis;
+        const val = p.type==='option'?p.currentPrice:p.shares*p.currentPrice;
+        const pnl = val-inv; const pct=(pnl/inv)*100;
+        tInv+=inv; tVal+=val;
+        const gc = Math.abs(pnl)<0.005?'flat':pnl>=0?'gain':'loss';
+        const pc = pnl>=0?'#3B6D11':'#A32D2D';
+        const at = p.account==='Robinhood'?'rh':p.account==='Merrill Edge IRA'?'ml':'';
+        return `<div class="card ${gc}">
+          <div class="card-top">
+            <div>
+              <div class="card-name">${p.name} <span style="font-size:12px;font-weight:400;color:#73726c">${p.ticker||'OPT'}</span>${p.type==='option'?'<span class="tag opt">option</span>':''}</div>
+              <div class="card-sub"><span class="tag ${at}">${p.account}</span> &middot; Added ${p.addedDate}</div>
+            </div>
+            <div style="text-align:right">
+              <div class="card-pnl-val" style="color:${pc}">${fmtS(pnl)}</div>
+              <div class="card-pnl-pct" style="color:${pc}">${fmtP(pct)}</div>
+            </div>
+          </div>
+          <div class="card-stats">
+            <div><div class="stat-label">Shares</div><div class="stat-val">${fmtSh(p)}</div></div>
+            <div><div class="stat-label">Cost basis</div><div class="stat-val">${p.type==='option'?fmt(p.costBasis)+' paid':fmt(p.costBasis)+' / sh'}</div></div>
+            <div><div class="stat-label">Current</div><div class="stat-val">${p.type==='option'?fmt(p.currentPrice):fmt(p.currentPrice)+' / sh'}</div></div>
+            <div><div class="stat-label">Total value</div><div class="stat-val">${fmt(val)}</div></div>
+          </div>
+          <div class="card-actions">
+            <div class="manual-row">
+              <input class="manual-input" type="number" step="0.01" placeholder="Update price $" id="mp-${idx}"/>
+              <button class="manual-btn" onclick="manualUp(${idx})">Update</button>
+            </div>
+            <button class="close-btn" onclick="closePos(${idx})">Mark closed</button>
+            <button class="remove-btn" onclick="removePos(${idx})">Remove</button>
+          </div>
+        </div>`;
+      }).join('');
 
-  list.innerHTML = positions.map((p, i) => {
-    const invested = p.type === 'option' ? p.costBasis : p.shares * p.costBasis;
-    const value = p.type === 'option' ? p.currentPrice : p.shares * p.currentPrice;
-    const pnl = value - invested;
-    const pct = (pnl / invested) * 100;
-    totalInvested += invested;
-    totalValue += value;
-
-    const gainClass = Math.abs(pnl) < 0.005 ? 'flat' : pnl >= 0 ? 'gain' : 'loss';
-    const pnlColor = pnl >= 0 ? '#3B6D11' : '#A32D2D';
-    const acctTag = p.account === 'Robinhood' ? 'rh' : p.account === 'Merrill Edge IRA' ? 'ml' : '';
-    const typeTag = p.type === 'option' ? '<span class="tag opt">option</span>' : '';
-    const acctTagHtml = acctTag ? `<span class="tag ${acctTag}">${p.account}</span>` : `<span class="tag">${p.account}</span>`;
-
-    return `<div class="card ${gainClass}">
-      <div class="card-top">
-        <div>
-          <div class="card-name">${p.name} <span style="font-size:12px;font-weight:400;color:#73726c">${p.ticker || 'OPT'}</span>${typeTag}</div>
-          <div class="card-sub">${acctTagHtml} &middot; Added ${p.addedDate}</div>
-          ${p.type === 'option' ? '<div class="opt-note">Update price manually in options section below</div>' : ''}
-        </div>
-        <div class="card-pnl">
-          <div class="card-pnl-val" style="color:${pnlColor}">${fmtSigned(pnl)}</div>
-          <div class="card-pnl-pct" style="color:${pnlColor}">${fmtPct(pct)}</div>
-        </div>
-      </div>
-      <div class="card-stats">
-        <div><div class="stat-label">Shares</div><div class="stat-val">${fmtShares(p)}</div></div>
-        <div><div class="stat-label">Cost basis</div><div class="stat-val">${p.type === 'option' ? fmt(p.costBasis) + ' paid' : fmt(p.costBasis) + ' / sh'}</div></div>
-        <div><div class="stat-label">Current</div><div class="stat-val">${p.type === 'option' ? fmt(p.currentPrice) : fmt(p.currentPrice) + ' / sh'}</div></div>
-        <div><div class="stat-label">Total value</div><div class="stat-val">${fmt(value)}</div></div>
-      </div>
-      <button class="remove-btn" onclick="removePosition(${i})">Remove position</button>
-    </div>`;
-  }).join('');
-
-  const totalPnl = totalValue - totalInvested;
-  const totalPct = (totalPnl / totalInvested) * 100;
-  const pnlClass = totalPnl >= 0 ? 'pos' : 'neg';
-
-  document.getElementById('t-invested').textContent = fmt(totalInvested);
-  document.getElementById('t-value').textContent = fmt(totalValue);
-  document.getElementById('t-pnl').className = 'metric-val ' + pnlClass;
-  document.getElementById('t-pnl').textContent = fmtSigned(totalPnl);
-  document.getElementById('t-pct').className = 'metric-val ' + pnlClass;
-  document.getElementById('t-pct').textContent = fmtPct(totalPct);
-
-  renderOptionInputs();
-}
-
-function renderOptionInputs() {
-  const opts = positions.filter(p => p.type === 'option');
-  const section = document.getElementById('opt-section');
-  if (opts.length === 0) { section.style.display = 'none'; return; }
-  section.style.display = 'block';
-  document.getElementById('opt-inputs').innerHTML = opts.map((p, _) => {
-    const idx = positions.indexOf(p);
-    return `<div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;flex-wrap:wrap;">
-      <span style="font-size:13px;min-width:160px;">${p.name}</span>
-      <input type="number" step="0.01" placeholder="New contract value $" style="font-size:13px;padding:6px 10px;border-radius:8px;border:0.5px solid rgba(0,0,0,0.2);width:160px;" id="opt-val-${idx}" />
-      <button onclick="updateOption(${idx})" style="font-size:13px;padding:6px 12px;border-radius:8px;border:0.5px solid rgba(0,0,0,0.2);cursor:pointer;">Update</button>
-      <span style="font-size:12px;color:#73726c;">Currently: ${fmt(p.currentPrice)}</span>
-    </div>`;
-  }).join('');
-}
-
-function updateOption(idx) {
-  const val = parseFloat(document.getElementById('opt-val-' + idx).value);
-  if (isNaN(val) || val < 0) return;
-  positions[idx].currentPrice = val;
-  savePositions(positions);
-  renderAll();
-}
-
-function removePosition(idx) {
-  if (!confirm('Remove ' + positions[idx].name + '?')) return;
-  positions.splice(idx, 1);
-  savePositions(positions);
-  renderAll();
-}
-
-function addPosition() {
-  const ticker = document.getElementById('add-ticker').value.trim().toUpperCase();
-  const name = document.getElementById('add-name').value.trim();
-  const shares = parseFloat(document.getElementById('add-shares').value);
-  const cost = parseFloat(document.getElementById('add-cost').value);
-  const account = document.getElementById('add-account').value;
-  const type = document.getElementById('add-type').value;
-  const errEl = document.getElementById('add-error');
-
-  if (!name) { errEl.textContent = 'Please enter a name.'; errEl.style.display = 'block'; return; }
-  if (isNaN(shares) || shares <= 0) { errEl.textContent = 'Please enter valid shares.'; errEl.style.display = 'block'; return; }
-  if (isNaN(cost) || cost <= 0) { errEl.textContent = 'Please enter valid cost basis.'; errEl.style.display = 'block'; return; }
-  errEl.style.display = 'none';
-
-  const now = new Date();
-  const dateStr = now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  const id = type === 'option' ? ticker + '_OPT_' + Date.now() : ticker;
-
-  positions.push({
-    id, name,
-    ticker: type === 'option' ? null : ticker,
-    account, shares, costBasis: cost,
-    currentPrice: cost,
-    type, addedDate: dateStr
-  });
-
-  savePositions(positions);
-  renderAll();
-
-  document.getElementById('add-ticker').value = '';
-  document.getElementById('add-name').value = '';
-  document.getElementById('add-shares').value = '';
-  document.getElementById('add-cost').value = '';
-}
-
-async function fetchSingle(ticker) {
-  const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=${API_KEY}`;
-  const res = await fetch(url);
-  const data = await res.json();
-  const price = parseFloat(data?.['Global Quote']?.['05. price']);
-  if (isNaN(price)) throw new Error('No price for ' + ticker);
-  return price;
-}
-
-async function fetchAllPrices() {
-  const btn = document.getElementById('refresh-btn');
-  const status = document.getElementById('status-text');
-  const errBox = document.getElementById('error-box');
-  btn.disabled = true;
-  errBox.style.display = 'none';
-
-  const stockPositions = positions.filter(p => p.type === 'stock' && p.ticker);
-  if (stockPositions.length === 0) {
-    status.textContent = 'No stock positions to refresh.';
-    btn.disabled = false;
-    return;
-  }
-
-  status.textContent = 'Fetching ' + stockPositions.length + ' prices...';
-
-  let failed = [];
-  for (let i = 0; i < stockPositions.length; i++) {
-    const p = stockPositions[i];
-    status.textContent = 'Fetching ' + p.ticker + '... (' + (i+1) + '/' + stockPositions.length + ')';
-    try {
-      const price = await fetchSingle(p.ticker);
+  if (closed.length>0) {
+    document.getElementById('closed-wrap').style.display='block';
+    document.getElementById('closed-list').innerHTML = closed.map(p => {
       const idx = positions.indexOf(p);
-      positions[idx].currentPrice = price;
-      await new Promise(r => setTimeout(r, 1200));
-    } catch {
-      failed.push(p.ticker);
-    }
+      const inv = p.type==='option'?p.costBasis:p.shares*p.costBasis;
+      const val = p.closedPrice||p.currentPrice;
+      const pnl = val-inv; const pct=(pnl/inv)*100;
+      const pc = pnl>=0?'#3B6D11':'#A32D2D';
+      tInv+=inv; tVal+=val;
+      return `<div class="card closed-card">
+        <div class="card-top">
+          <div>
+            <div class="card-name">${p.name} <span style="font-size:12px;font-weight:400;color:#73726c">${p.ticker||'OPT'}</span><span class="tag ctag">closed ${p.closedDate||''}</span></div>
+            <div class="card-sub">${p.account} &middot; Added ${p.addedDate}</div>
+          </div>
+          <div style="text-align:right">
+            <div class="card-pnl-val" style="color:${pc}">${fmtS(pnl)}</div>
+            <div class="card-pnl-pct" style="color:${pc}">${fmtP(pct)}</div>
+          </div>
+        </div>
+        <div class="card-stats">
+          <div><div class="stat-label">Invested</div><div class="stat-val">${fmt(inv)}</div></div>
+          <div><div class="stat-label">Closed at</div><div class="stat-val">${fmt(val)}</div></div>
+          <div><div class="stat-label">P&L</div><div class="stat-val" style="color:${pc}">${fmtS(pnl)}</div></div>
+          <div><div class="stat-label">Return</div><div class="stat-val" style="color:${pc}">${fmtP(pct)}</div></div>
+        </div>
+        <div class="card-actions"><button class="remove-btn" onclick="removePos(${idx})">Remove</button></div>
+      </div>`;
+    }).join('');
+  } else {
+    document.getElementById('closed-wrap').style.display='none';
   }
 
-  savePositions(positions);
-  renderAll();
+  const tp=tVal-tInv; const tpct=tInv>0?(tp/tInv)*100:0;
+  document.getElementById('t-inv').textContent=fmt(tInv);
+  document.getElementById('t-val').textContent=fmt(tVal);
+  document.getElementById('t-pnl').className='metric-val '+(tp>=0?'pos':'neg');
+  document.getElementById('t-pnl').textContent=fmtS(tp);
+  document.getElementById('t-pct').className='metric-val '+(tp>=0?'pos':'neg');
+  document.getElementById('t-pct').textContent=fmtP(tpct);
+}
 
-  const now = new Date();
-  status.textContent = 'Updated ' + now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-  document.getElementById('pos-label').textContent = 'Your positions — updated ' + now.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+function manualUp(idx) {
+  const v=parseFloat(document.getElementById('mp-'+idx).value);
+  if(isNaN(v)||v<=0)return;
+  positions[idx].currentPrice=v;
+  save(); renderAll();
+}
 
-  if (failed.length > 0) {
-    errBox.textContent = 'Could not fetch: ' + failed.join(', ') + '. Free tier allows 25 requests/day.';
-    errBox.style.display = 'block';
+function closePos(idx) {
+  const p=positions[idx];
+  const ps=prompt('Closing price for '+p.name+'?');
+  const pv=parseFloat(ps);
+  if(isNaN(pv)||pv<=0)return;
+  positions[idx].closed=true;
+  positions[idx].closedPrice=pv;
+  const now=new Date();
+  positions[idx].closedDate=now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  save(); renderAll();
+}
+
+function removePos(idx) {
+  if(!confirm('Remove '+positions[idx].name+'?'))return;
+  positions.splice(idx,1); save(); renderAll();
+}
+
+function addPos() {
+  const tick=document.getElementById('a-tick').value.trim().toUpperCase();
+  const name=document.getElementById('a-name').value.trim();
+  const shares=parseFloat(document.getElementById('a-shares').value);
+  const cost=parseFloat(document.getElementById('a-cost').value);
+  const acct=document.getElementById('a-acct').value;
+  const type=document.getElementById('a-type').value;
+  const err=document.getElementById('a-err');
+  if(!name){err.textContent='Enter a name.';err.style.display='block';return;}
+  if(isNaN(shares)||shares<=0){err.textContent='Enter valid shares.';err.style.display='block';return;}
+  if(isNaN(cost)||cost<=0){err.textContent='Enter valid cost.';err.style.display='block';return;}
+  err.style.display='none';
+  const now=new Date();
+  const ds=now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  positions.push({id:'u'+Date.now(),name,ticker:type==='option'?null:tick,account:acct,shares,costBasis:cost,currentPrice:cost,type,addedDate:ds,closed:false});
+  save(); renderAll();
+  ['a-tick','a-name','a-shares','a-cost'].forEach(id=>document.getElementById(id).value='');
+}
+
+async function fetchFH(ticker) {
+  const r=await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${FH}`);
+  const d=await r.json();
+  if(!d?.c||d.c===0)throw new Error('No FH price');
+  return {price:d.c,source:'Finnhub'};
+}
+
+async function fetchAV(ticker) {
+  const r=await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=${AV}`);
+  const d=await r.json();
+  if(d?.Information)throw new Error('AV limit');
+  const p=parseFloat(d?.['Global Quote']?.['05. price']);
+  if(isNaN(p))throw new Error('No AV price');
+  return {price:p,source:'Alpha Vantage'};
+}
+
+async function fetchPrice(ticker) {
+  try { return await fetchFH(ticker); }
+  catch { try { return await fetchAV(ticker); } catch { throw new Error('Both failed: '+ticker); } }
+}
+
+async function fetchAll() {
+  const btn=document.getElementById('rbtn');
+  const st=document.getElementById('stext');
+  const eb=document.getElementById('ebox');
+  btn.disabled=true; eb.style.display='none';
+  const stocks=positions.filter(p=>p.type==='stock'&&p.ticker&&!p.closed);
+  if(!stocks.length){st.textContent='No open stock positions.';btn.disabled=false;return;}
+  let failed=[],sources=new Set();
+  for(let i=0;i<stocks.length;i++){
+    const p=stocks[i];
+    st.textContent='Fetching '+p.ticker+'... ('+(i+1)+'/'+stocks.length+')';
+    try{
+      const {price,source}=await fetchPrice(p.ticker);
+      positions[positions.indexOf(p)].currentPrice=price;
+      sources.add(source);
+    } catch { failed.push(p.ticker); }
   }
-
-  btn.disabled = false;
+  save(); renderAll();
+  const now=new Date();
+  st.textContent='Updated '+now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+' via '+[...sources].join(' + ');
+  document.getElementById('pos-label').textContent='Open positions — updated '+now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
+  if(failed.length){eb.textContent='Could not fetch: '+failed.join(', ')+'. Update manually.';eb.style.display='block';}
+  btn.disabled=false;
 }
 
 renderAll();
