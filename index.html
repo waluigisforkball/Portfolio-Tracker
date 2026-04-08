@@ -2,309 +2,699 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Portfolio Tracker</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>Portfolio</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f5f0; color: #1a1a18; min-height: 100vh; padding: 16px; }
-  h1 { font-size: 20px; font-weight: 500; margin-bottom: 4px; }
-  .subtitle { font-size: 13px; color: #73726c; margin-bottom: 20px; }
-  .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; margin-bottom: 20px; }
-  @media (min-width: 500px) { .summary-grid { grid-template-columns: repeat(4, 1fr); } }
-  .metric { background: #fff; border-radius: 10px; padding: 12px; border: 0.5px solid rgba(0,0,0,0.1); }
-  .metric-label { font-size: 11px; color: #73726c; margin-bottom: 4px; }
-  .metric-val { font-size: 18px; font-weight: 500; }
-  .pos { color: #3B6D11; } .neg { color: #A32D2D; }
-  .card { background: #fff; border-radius: 12px; border: 0.5px solid rgba(0,0,0,0.1); padding: 14px; margin-bottom: 8px; border-left: 3px solid #d3d1c7; }
-  .card.gain { border-left-color: #3B6D11; }
-  .card.loss { border-left-color: #A32D2D; }
-  .card.flat { border-left-color: #b4b2a9; }
-  .card.closed-card { border-left-color: #73726c; opacity: 0.75; }
-  .card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 10px; }
-  .card-name { font-size: 15px; font-weight: 500; }
-  .card-sub { font-size: 11px; color: #73726c; margin-top: 2px; }
-  .card-pnl-val { font-size: 15px; font-weight: 500; }
-  .card-pnl-pct { font-size: 12px; margin-top: 2px; }
-  .card-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
-  .stat-label { font-size: 11px; color: #73726c; }
-  .stat-val { font-size: 12px; color: #444441; margin-top: 2px; }
-  .card-actions { display: flex; gap: 10px; margin-top: 10px; align-items: center; flex-wrap: wrap; }
-  .remove-btn { font-size: 11px; color: #A32D2D; background: none; border: none; cursor: pointer; padding: 0; }
-  .close-btn { font-size: 11px; color: #73726c; background: none; border: none; cursor: pointer; padding: 0; }
-  .manual-row { display: flex; gap: 6px; align-items: center; }
-  .manual-input { font-size: 12px; padding: 4px 8px; border-radius: 6px; border: 0.5px solid rgba(0,0,0,0.2); width: 100px; background: #fff; color: #1a1a18; }
-  .manual-btn { font-size: 11px; padding: 4px 10px; border-radius: 6px; border: 0.5px solid rgba(0,0,0,0.2); background: #fff; cursor: pointer; color: #1a1a18; }
-  .manual-btn:hover { background: #f5f5f0; }
-  .section { background: #fff; border-radius: 12px; border: 0.5px solid rgba(0,0,0,0.1); padding: 14px; margin-bottom: 16px; }
-  .section-title { font-size: 13px; font-weight: 500; margin-bottom: 12px; color: #3d3d3a; }
-  .form-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: flex-end; }
-  .form-group { display: flex; flex-direction: column; gap: 4px; }
-  .form-group label { font-size: 11px; color: #73726c; }
-  input[type="text"], input[type="number"], select { font-size: 13px; padding: 8px 10px; border-radius: 8px; border: 0.5px solid rgba(0,0,0,0.2); background: #fff; color: #1a1a18; outline: none; }
-  .input-sm { width: 90px; } .input-md { width: 120px; } .input-lg { width: 160px; }
-  button { font-size: 13px; padding: 8px 16px; border-radius: 8px; border: 0.5px solid rgba(0,0,0,0.2); background: #fff; color: #1a1a18; cursor: pointer; }
-  button:hover { background: #f5f5f0; }
-  .btn-primary { background: #1a1a18; color: #fff; border-color: #1a1a18; }
-  .btn-primary:hover { background: #3d3d3a; }
-  .btn-primary:disabled { opacity: 0.5; cursor: not-allowed; }
-  .toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 12px; flex-wrap: wrap; }
-  .status { font-size: 12px; color: #73726c; }
-  .error { font-size: 12px; color: #A32D2D; background: #FCEBEB; border-radius: 8px; padding: 8px 12px; margin-bottom: 12px; display: none; }
-  .tag { font-size: 10px; padding: 2px 7px; border-radius: 99px; background: #f1efe8; color: #5f5e5a; margin-left: 4px; vertical-align: middle; }
-  .tag.opt { background: #FAEEDA; color: #854F0B; }
-  .tag.rh { background: #E6F1FB; color: #185FA5; }
-  .tag.ml { background: #EAF3DE; color: #3B6D11; }
-  .tag.ctag { background: #f1efe8; color: #73726c; }
-  .divider { border: none; border-top: 0.5px solid rgba(0,0,0,0.08); margin: 20px 0; }
-  .section-label { font-size: 12px; color: #73726c; margin-bottom: 8px; }
-  .empty { font-size: 13px; color: #73726c; text-align: center; padding: 24px; }
+:root {
+  --bg: #0e0f0e;
+  --surface: #161714;
+  --surface2: #1d1e1b;
+  --border: rgba(255,255,255,0.07);
+  --border2: rgba(255,255,255,0.12);
+  --text: #e8e6df;
+  --muted: #6b6a63;
+  --muted2: #9e9c94;
+  --green: #7cb87c;
+  --green-bg: rgba(124,184,124,0.08);
+  --red: #c47a7a;
+  --red-bg: rgba(196,122,122,0.08);
+  --accent: #c8b97a;
+  --accent-bg: rgba(200,185,122,0.1);
+  --rh: #94b8d4;
+  --ml: #94c49a;
+  --radius: 10px;
+  --mono: 'DM Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  padding: 20px 16px 48px;
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+/* Header */
+.header { margin-bottom: 24px; padding-top: 8px; }
+.header-top { display: flex; justify-content: space-between; align-items: flex-start; }
+.app-title { font-size: 13px; font-family: var(--mono); color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 6px; }
+.settings-btn { background: none; border: 1px solid var(--border2); border-radius: 6px; color: var(--muted2); font-size: 11px; font-family: var(--mono); padding: 5px 10px; cursor: pointer; letter-spacing: 0.05em; }
+.settings-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Summary */
+.summary { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 20px; }
+.summary-wide { grid-column: 1 / -1; }
+.metric {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+}
+.metric-label { font-size: 10px; font-family: var(--mono); color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
+.metric-val { font-size: 22px; font-family: var(--mono); font-weight: 400; }
+.metric-val.pos { color: var(--green); }
+.metric-val.neg { color: var(--red); }
+.metric-sub { font-size: 11px; font-family: var(--mono); color: var(--muted); margin-top: 3px; }
+
+/* Toolbar */
+.toolbar { display: flex; gap: 8px; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+.refresh-btn {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em;
+  padding: 8px 16px; border-radius: 6px;
+  background: var(--accent-bg); border: 1px solid var(--accent);
+  color: var(--accent); cursor: pointer; text-transform: uppercase;
+  transition: background 0.15s;
+}
+.refresh-btn:hover { background: rgba(200,185,122,0.18); }
+.refresh-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.status-txt { font-size: 11px; font-family: var(--mono); color: var(--muted); }
+
+/* Error */
+.err-bar { font-size: 12px; font-family: var(--mono); background: var(--red-bg); border: 1px solid var(--red); border-radius: 6px; color: var(--red); padding: 8px 12px; margin-bottom: 12px; display: none; }
+
+/* Section labels */
+.section-label { font-size: 10px; font-family: var(--mono); color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 10px; margin-top: 4px; }
+
+/* Cards */
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px;
+  margin-bottom: 8px;
+  border-left: 2px solid var(--border);
+  transition: border-color 0.2s;
+}
+.card.gain { border-left-color: var(--green); }
+.card.loss { border-left-color: var(--red); }
+.card.flat { border-left-color: var(--muted); }
+.card.closed-card { border-left-color: var(--muted); opacity: 0.6; }
+
+.card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
+.card-ticker { font-size: 18px; font-family: var(--mono); font-weight: 500; }
+.card-name { font-size: 11px; color: var(--muted2); margin-top: 2px; }
+.card-tags { display: flex; gap: 4px; margin-top: 5px; flex-wrap: wrap; }
+.tag {
+  font-size: 9px; font-family: var(--mono); letter-spacing: 0.05em;
+  padding: 2px 7px; border-radius: 99px;
+  border: 1px solid transparent;
+}
+.tag-rh { background: rgba(148,184,212,0.1); border-color: rgba(148,184,212,0.3); color: var(--rh); }
+.tag-ml { background: rgba(148,196,154,0.1); border-color: rgba(148,196,154,0.3); color: var(--ml); }
+.tag-opt { background: var(--accent-bg); border-color: rgba(200,185,122,0.3); color: var(--accent); }
+.tag-other { background: var(--surface2); border-color: var(--border); color: var(--muted2); }
+
+.card-pnl { text-align: right; }
+.pnl-val { font-size: 16px; font-family: var(--mono); font-weight: 500; }
+.pnl-val.pos { color: var(--green); }
+.pnl-val.neg { color: var(--red); }
+.pnl-pct { font-size: 11px; font-family: var(--mono); margin-top: 2px; }
+.pnl-pct.pos { color: var(--green); }
+.pnl-pct.neg { color: var(--red); }
+
+.card-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-bottom: 10px; }
+.stat-label { font-size: 9px; font-family: var(--mono); color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 3px; }
+.stat-val { font-size: 12px; font-family: var(--mono); color: var(--text); }
+
+.card-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; border-top: 1px solid var(--border); padding-top: 10px; }
+.act-btn { font-size: 10px; font-family: var(--mono); background: none; border: none; cursor: pointer; padding: 0; letter-spacing: 0.04em; text-transform: uppercase; }
+.act-btn.remove { color: var(--red); }
+.act-btn.close { color: var(--muted2); }
+.act-btn:hover { opacity: 0.7; }
+
+.manual-row { display: flex; gap: 6px; align-items: center; }
+.manual-input {
+  font-size: 12px; font-family: var(--mono);
+  padding: 5px 8px; border-radius: 6px;
+  border: 1px solid var(--border2); background: var(--surface2);
+  color: var(--text); width: 110px; outline: none;
+}
+.manual-input:focus { border-color: var(--accent); }
+.manual-btn {
+  font-size: 10px; font-family: var(--mono); letter-spacing: 0.04em;
+  padding: 5px 10px; border-radius: 6px;
+  border: 1px solid var(--border2); background: var(--surface2);
+  color: var(--muted2); cursor: pointer; text-transform: uppercase;
+}
+.manual-btn:hover { border-color: var(--accent); color: var(--accent); }
+
+/* Divider */
+.divider { border: none; border-top: 1px solid var(--border); margin: 24px 0; }
+
+/* Add form */
+.add-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+}
+.add-title { font-size: 11px; font-family: var(--mono); color: var(--muted); letter-spacing: 0.07em; text-transform: uppercase; margin-bottom: 14px; }
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
+.form-full { grid-column: 1 / -1; }
+.form-group { display: flex; flex-direction: column; gap: 5px; }
+.form-label { font-size: 10px; font-family: var(--mono); color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; }
+.form-input, .form-select {
+  font-size: 13px; font-family: var(--mono);
+  padding: 9px 11px; border-radius: 7px;
+  border: 1px solid var(--border2); background: var(--surface2);
+  color: var(--text); outline: none; width: 100%;
+  -webkit-appearance: none;
+}
+.form-input:focus, .form-select:focus { border-color: var(--accent); }
+.form-input::placeholder { color: var(--muted); }
+.add-btn {
+  width: 100%; padding: 11px;
+  font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+  background: var(--accent-bg); border: 1px solid var(--accent);
+  color: var(--accent); border-radius: 7px; cursor: pointer;
+  transition: background 0.15s;
+}
+.add-btn:hover { background: rgba(200,185,122,0.2); }
+.add-btn:disabled { opacity: 0.4; cursor: not-allowed; }
+.form-err { font-size: 11px; font-family: var(--mono); color: var(--red); margin-top: 6px; display: none; }
+
+/* Settings modal */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+  display: none; align-items: center; justify-content: center;
+  z-index: 100; padding: 20px;
+}
+.modal-overlay.open { display: flex; }
+.modal {
+  background: var(--surface); border: 1px solid var(--border2);
+  border-radius: 12px; padding: 20px; width: 100%; max-width: 420px;
+}
+.modal-title { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: 16px; }
+.modal-body p { font-size: 13px; color: var(--muted2); margin-bottom: 12px; line-height: 1.6; }
+.modal-body a { color: var(--accent); text-decoration: none; }
+.modal-body a:hover { text-decoration: underline; }
+.modal-input {
+  font-family: var(--mono); font-size: 12px;
+  padding: 9px 11px; border-radius: 7px;
+  border: 1px solid var(--border2); background: var(--surface2);
+  color: var(--text); outline: none; width: 100%; margin-bottom: 10px;
+}
+.modal-input:focus { border-color: var(--accent); }
+.modal-actions { display: flex; gap: 8px; justify-content: flex-end; margin-top: 4px; }
+.modal-btn {
+  font-family: var(--mono); font-size: 11px; letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 8px 16px; border-radius: 6px; cursor: pointer;
+}
+.modal-btn.save { background: var(--accent-bg); border: 1px solid var(--accent); color: var(--accent); }
+.modal-btn.save:hover { background: rgba(200,185,122,0.2); }
+.modal-btn.cancel { background: none; border: 1px solid var(--border2); color: var(--muted2); }
+.modal-btn.cancel:hover { border-color: var(--muted2); }
+.token-status { font-size: 11px; font-family: var(--mono); margin-bottom: 10px; }
+.token-status.ok { color: var(--green); }
+.token-status.missing { color: var(--red); }
+
+/* Sync indicator */
+.sync-dot {
+  display: inline-block; width: 6px; height: 6px;
+  border-radius: 50%; background: var(--muted); margin-right: 6px;
+  vertical-align: middle;
+}
+.sync-dot.synced { background: var(--green); }
+.sync-dot.syncing { background: var(--accent); animation: pulse 1s infinite; }
+.sync-dot.error { background: var(--red); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+.empty { font-size: 12px; font-family: var(--mono); color: var(--muted); text-align: center; padding: 28px; }
+.closed-toggle { font-size: 11px; font-family: var(--mono); color: var(--muted2); background: none; border: none; cursor: pointer; padding: 0; letter-spacing: 0.04em; text-transform: uppercase; margin-bottom: 10px; }
+.closed-toggle:hover { color: var(--text); }
 </style>
 </head>
 <body>
 
-<h1>Portfolio tracker</h1>
-<p class="subtitle">Finnhub live prices &middot; Alpha Vantage fallback &middot; Saves locally</p>
+<div class="header">
+  <div class="header-top">
+    <div>
+      <div class="app-title">Portfolio</div>
+    </div>
+    <button class="settings-btn" onclick="openSettings()">⚙ GitHub Sync</button>
+  </div>
+  <div style="font-size:11px;font-family:var(--mono);color:var(--muted);margin-top:4px;">
+    <span class="sync-dot" id="sync-dot"></span><span id="sync-label">—</span>
+  </div>
+</div>
 
-<div class="summary-grid">
-  <div class="metric"><div class="metric-label">Total invested</div><div class="metric-val" id="t-inv">—</div></div>
-  <div class="metric"><div class="metric-label">Current value</div><div class="metric-val" id="t-val">—</div></div>
-  <div class="metric"><div class="metric-label">Gain / loss</div><div class="metric-val" id="t-pnl">—</div></div>
-  <div class="metric"><div class="metric-label">Return</div><div class="metric-val" id="t-pct">—</div></div>
+<div class="summary">
+  <div class="metric">
+    <div class="metric-label">Invested</div>
+    <div class="metric-val" id="t-inv">—</div>
+  </div>
+  <div class="metric">
+    <div class="metric-label">Value</div>
+    <div class="metric-val" id="t-val">—</div>
+  </div>
+  <div class="metric">
+    <div class="metric-label">Gain / Loss</div>
+    <div class="metric-val" id="t-pnl">—</div>
+    <div class="metric-sub" id="t-pct">—</div>
+  </div>
+  <div class="metric">
+    <div class="metric-label">Positions</div>
+    <div class="metric-val" id="t-count">—</div>
+    <div class="metric-sub" id="t-accounts">—</div>
+  </div>
 </div>
 
 <div class="toolbar">
-  <button class="btn-primary" id="rbtn" onclick="fetchAll()">Refresh live prices</button>
-  <span class="status" id="stext">Not yet refreshed</span>
+  <button class="refresh-btn" id="rbtn" onclick="fetchAll()">↻ Refresh Prices</button>
+  <span class="status-txt" id="stext">Not yet refreshed</span>
 </div>
-<div class="error" id="ebox"></div>
+<div class="err-bar" id="ebox"></div>
 
-<div class="section-label" id="pos-label">Open positions</div>
+<div class="section-label">Open Positions</div>
 <div id="open-list"></div>
 
-<div id="closed-wrap" style="display:none; margin-top:16px;">
-  <div class="section-label">Closed positions</div>
-  <div id="closed-list"></div>
+<div id="closed-wrap" style="display:none; margin-top:20px;">
+  <button class="closed-toggle" id="closed-toggle" onclick="toggleClosed()">▸ Closed Positions</button>
+  <div id="closed-list" style="display:none;"></div>
 </div>
 
 <hr class="divider">
 
-<div class="section">
-  <div class="section-title">Add a position</div>
-  <div class="form-row">
-    <div class="form-group"><label>Ticker</label><input class="input-sm" id="a-tick" type="text" placeholder="AAPL" maxlength="8"/></div>
-    <div class="form-group"><label>Name</label><input class="input-lg" id="a-name" type="text" placeholder="Apple Inc."/></div>
-    <div class="form-group"><label>Shares</label><input class="input-sm" id="a-shares" type="number" step="0.0001" placeholder="0"/></div>
-    <div class="form-group"><label>Cost / share</label><input class="input-sm" id="a-cost" type="number" step="0.01" placeholder="0.00"/></div>
-    <div class="form-group"><label>Account</label>
-      <select id="a-acct"><option>Merrill Edge IRA</option><option>Robinhood</option><option>Other</option></select>
+<div class="add-section">
+  <div class="add-title">Add Position</div>
+  <div class="form-grid">
+    <div class="form-group">
+      <div class="form-label">Ticker</div>
+      <input class="form-input" id="a-tick" type="text" placeholder="AAPL" maxlength="8" autocapitalize="characters"/>
     </div>
-    <div class="form-group"><label>Type</label>
-      <select id="a-type"><option value="stock">Stock / ETF</option><option value="option">Option (manual)</option></select>
+    <div class="form-group">
+      <div class="form-label">Name</div>
+      <input class="form-input" id="a-name" type="text" placeholder="Apple Inc."/>
     </div>
-    <div class="form-group" style="justify-content:flex-end;"><button class="btn-primary" onclick="addPos()">Add</button></div>
+    <div class="form-group">
+      <div class="form-label">Shares</div>
+      <input class="form-input" id="a-shares" type="number" step="0.0001" inputmode="decimal" placeholder="0"/>
+    </div>
+    <div class="form-group">
+      <div class="form-label">Cost / Share</div>
+      <input class="form-input" id="a-cost" type="number" step="0.01" inputmode="decimal" placeholder="0.00"/>
+    </div>
+    <div class="form-group">
+      <div class="form-label">Account</div>
+      <select class="form-select" id="a-acct">
+        <option>Merrill Edge IRA</option>
+        <option>Robinhood</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <div class="form-label">Type</div>
+      <select class="form-select" id="a-type">
+        <option value="stock">Stock / ETF</option>
+        <option value="option">Option (manual)</option>
+      </select>
+    </div>
   </div>
-  <div id="a-err" style="font-size:12px;color:#A32D2D;margin-top:8px;display:none;"></div>
+  <button class="add-btn" id="add-btn" onclick="addPos()">+ Add Position</button>
+  <div class="form-err" id="a-err"></div>
+</div>
+
+<!-- Settings Modal -->
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <div class="modal-title">GitHub Sync Setup</div>
+    <div class="modal-body">
+      <div class="token-status" id="token-status"></div>
+      <p>Your positions sync to <strong style="color:var(--text)">waluigisforkball/waluigisforkball.github.io</strong> via GitHub API. A personal access token is stored only on this device.</p>
+      <p>To generate a token: <a href="https://github.com/settings/tokens/new" target="_blank">github.com/settings/tokens/new</a> → select <strong style="color:var(--text)">repo</strong> scope → copy the token.</p>
+      <input class="modal-input" id="token-input" type="password" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx"/>
+    </div>
+    <div class="modal-actions">
+      <button class="modal-btn cancel" onclick="closeSettings()">Cancel</button>
+      <button class="modal-btn save" onclick="saveToken()">Save Token</button>
+    </div>
+  </div>
 </div>
 
 <script>
-const AV = 'GC12FPL30GNZKUD8';
-const FH = 'KHUcp_SpfC9IXnOHmDbzOLXm7_xrMCwL';
-const SK = 'portfolio_v4';
+// ── Config ────────────────────────────────────────────────
+const REPO_OWNER = 'waluigisforkball';
+const REPO_NAME  = 'waluigisforkball.github.io';
+const DATA_FILE  = 'data.json';
+const AV  = 'GC12FPL30GNZKUD8';
+const FH  = 'KHUcp_SpfC9IXnOHmDbzOLXm7_xrMCwL';
+const TOK_KEY = 'gh_pat_v1';
 
+// ── Defaults (first load if no data.json exists) ──────────
 const DEFAULTS = [
-  { id:'d1', name:'Delta Air Lines', ticker:'DAL', account:'Merrill Edge IRA', shares:4, costBasis:65.94, currentPrice:69.67, type:'stock', addedDate:'Apr 7, 2026', closed:false },
-  { id:'d2', name:'US Global Jets ETF', ticker:'JETS', account:'Merrill Edge IRA', shares:14, costBasis:24.67, currentPrice:26.52, type:'stock', addedDate:'Apr 7, 2026', closed:false },
-  { id:'d3', name:'iShares Core S&P 500', ticker:'IVV', account:'Merrill Edge IRA', shares:2, costBasis:659.67, currentPrice:679.14, type:'stock', addedDate:'Apr 7, 2026', closed:false },
-  { id:'d4', name:'Invesco QQQ', ticker:'QQQ', account:'Robinhood', shares:0.342393, costBasis:584.12, currentPrice:588.59, type:'stock', addedDate:'Apr 7, 2026', closed:false },
+  { id:'d3', name:'iShares Core S&P 500 ETF', ticker:'IVV', account:'Merrill Edge IRA', shares:2, costBasis:329.835, currentPrice:329.835, type:'stock', addedDate:'Apr 7, 2026', closed:false },
+  { id:'d4', name:'Invesco QQQ Trust', ticker:'QQQ', account:'Robinhood', shares:0.342393, costBasis:584.12, currentPrice:584.12, type:'stock', addedDate:'Apr 7, 2026', closed:false },
+  { id:'d1', name:'Delta Air Lines', ticker:'DAL', account:'Merrill Edge IRA', shares:1, costBasis:0, currentPrice:10, type:'stock', addedDate:'Apr 7, 2026', closed:true, closedPrice:10, closedDate:'Apr 8, 2026' },
+  { id:'d2', name:'US Global Jets ETF', ticker:'JETS', account:'Merrill Edge IRA', shares:1, costBasis:0, currentPrice:10, type:'stock', addedDate:'Apr 7, 2026', closed:true, closedPrice:10, closedDate:'Apr 8, 2026' },
   { id:'d5', name:'CCL $27.50 Call 4/24', ticker:null, account:'Robinhood', shares:1, costBasis:48.00, currentPrice:150.96, type:'option', addedDate:'Apr 7, 2026', closed:true, closedPrice:150.96, closedDate:'Apr 8, 2026' }
 ];
 
-function load() { try { const s=localStorage.getItem(SK); return s?JSON.parse(s):DEFAULTS; } catch { return DEFAULTS; } }
-function save() { try { localStorage.setItem(SK, JSON.stringify(positions)); } catch {} }
+// ── State ─────────────────────────────────────────────────
+let positions = [];
+let ghSHA = null; // current SHA of data.json in repo
+let closedOpen = false;
 
-let positions = load();
+// ── Formatting ────────────────────────────────────────────
+const fmt  = n => '$' + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmtS = n => (n>=0?'+$':'-$') + Math.abs(n).toLocaleString('en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+const fmtP = n => (n>=0?'+':'') + n.toFixed(2) + '%';
+const fmtSh = p => p.type==='option' ? '1 contract' : p.shares%1!==0 ? p.shares.toFixed(4)+' sh' : p.shares+' sh';
 
-const fmt = n => '$'+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-const fmtS = n => (n>=0?'+$':'-$')+Math.abs(n).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
-const fmtP = n => (n>=0?'+':'')+n.toFixed(2)+'%';
-const fmtSh = p => p.type==='option'?'1 contract':p.shares%1!==0?p.shares.toFixed(4)+' sh':p.shares+' sh';
+// ── Token helpers ─────────────────────────────────────────
+function getToken() { return localStorage.getItem(TOK_KEY) || ''; }
+function hasToken()  { return !!getToken(); }
 
+// ── Sync status ───────────────────────────────────────────
+function setSyncStatus(state, msg) {
+  const dot = document.getElementById('sync-dot');
+  const lbl = document.getElementById('sync-label');
+  dot.className = 'sync-dot ' + state;
+  lbl.textContent = msg;
+}
+
+// ── GitHub API ────────────────────────────────────────────
+async function ghGet() {
+  const token = getToken();
+  const headers = { 'Accept': 'application/vnd.github.v3+json' };
+  if (token) headers['Authorization'] = 'token ' + token;
+  const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DATA_FILE}`;
+  const r = await fetch(url, { headers });
+  if (r.status === 404) return null; // file doesn't exist yet
+  if (!r.ok) throw new Error('GitHub read failed: ' + r.status);
+  const d = await r.json();
+  ghSHA = d.sha;
+  const json = JSON.parse(atob(d.content.replace(/\n/g,'')));
+  return json;
+}
+
+async function ghPut(data) {
+  const token = getToken();
+  if (!token) { setSyncStatus('error', 'No token — saved locally only'); return false; }
+  setSyncStatus('syncing', 'Syncing…');
+  const content = btoa(unescape(encodeURIComponent(JSON.stringify(data, null, 2))));
+  const body = { message: 'Portfolio update', content };
+  if (ghSHA) body.sha = ghSHA;
+  const url = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${DATA_FILE}`;
+  const r = await fetch(url, {
+    method: 'PUT',
+    headers: {
+      'Authorization': 'token ' + token,
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+  if (!r.ok) {
+    const err = await r.json();
+    // SHA conflict — re-fetch and retry once
+    if (r.status === 409 || r.status === 422) {
+      const fresh = await ghGet();
+      if (fresh) return ghPut(data);
+    }
+    setSyncStatus('error', 'Sync failed');
+    return false;
+  }
+  const resp = await r.json();
+  ghSHA = resp.content.sha;
+  const now = new Date();
+  setSyncStatus('synced', 'Synced ' + now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}));
+  return true;
+}
+
+// ── Load data ─────────────────────────────────────────────
+async function loadData() {
+  setSyncStatus('syncing', 'Loading…');
+  try {
+    const data = await ghGet();
+    if (data && Array.isArray(data)) {
+      positions = data;
+      setSyncStatus('synced', 'Loaded from GitHub');
+    } else {
+      positions = JSON.parse(JSON.stringify(DEFAULTS));
+      setSyncStatus(hasToken() ? 'syncing' : 'error', hasToken() ? 'First run — saving defaults…' : 'No token — using defaults');
+      if (hasToken()) await ghPut(positions);
+    }
+  } catch (e) {
+    // Fallback to localStorage
+    const local = localStorage.getItem('portfolio_local');
+    positions = local ? JSON.parse(local) : JSON.parse(JSON.stringify(DEFAULTS));
+    setSyncStatus('error', 'GitHub unavailable — local only');
+  }
+  renderAll();
+}
+
+async function saveData() {
+  localStorage.setItem('portfolio_local', JSON.stringify(positions));
+  await ghPut(positions);
+  renderAll();
+}
+
+// ── Render ────────────────────────────────────────────────
 function renderAll() {
-  const open = positions.filter(p=>!p.closed);
-  const closed = positions.filter(p=>p.closed);
+  const open   = positions.filter(p => !p.closed);
+  const closed = positions.filter(p =>  p.closed);
   let tInv=0, tVal=0;
 
-  document.getElementById('open-list').innerHTML = open.length===0
-    ? '<div class="empty">No open positions. Add one below.</div>'
-    : open.map(p => {
-        const idx = positions.indexOf(p);
-        const inv = p.type==='option'?p.costBasis:p.shares*p.costBasis;
-        const val = p.type==='option'?p.currentPrice:p.shares*p.currentPrice;
-        const pnl = val-inv; const pct=(pnl/inv)*100;
-        tInv+=inv; tVal+=val;
-        const gc = Math.abs(pnl)<0.005?'flat':pnl>=0?'gain':'loss';
-        const pc = pnl>=0?'#3B6D11':'#A32D2D';
-        const at = p.account==='Robinhood'?'rh':p.account==='Merrill Edge IRA'?'ml':'';
-        return `<div class="card ${gc}">
-          <div class="card-top">
-            <div>
-              <div class="card-name">${p.name} <span style="font-size:12px;font-weight:400;color:#73726c">${p.ticker||'OPT'}</span>${p.type==='option'?'<span class="tag opt">option</span>':''}</div>
-              <div class="card-sub"><span class="tag ${at}">${p.account}</span> &middot; Added ${p.addedDate}</div>
-            </div>
-            <div style="text-align:right">
-              <div class="card-pnl-val" style="color:${pc}">${fmtS(pnl)}</div>
-              <div class="card-pnl-pct" style="color:${pc}">${fmtP(pct)}</div>
+  // Open positions
+  if (open.length === 0) {
+    document.getElementById('open-list').innerHTML = '<div class="empty">No open positions — add one below.</div>';
+  } else {
+    document.getElementById('open-list').innerHTML = open.map(p => {
+      const idx = positions.indexOf(p);
+      const inv = p.type==='option' ? p.costBasis : p.shares * p.costBasis;
+      const val = p.type==='option' ? p.currentPrice : p.shares * p.currentPrice;
+      const pnl = val - inv;
+      const pct = inv > 0 ? (pnl/inv)*100 : 0;
+      tInv += inv; tVal += val;
+      const gc = Math.abs(pnl)<0.005 ? 'flat' : pnl>=0 ? 'gain' : 'loss';
+      const pc = pnl>=0 ? 'pos' : 'neg';
+      const acctTag = p.account==='Robinhood' ? 'tag-rh' : p.account==='Merrill Edge IRA' ? 'tag-ml' : 'tag-other';
+      return `<div class="card ${gc}">
+        <div class="card-top">
+          <div>
+            <div class="card-ticker">${p.ticker||'OPT'}</div>
+            <div class="card-name">${p.name}</div>
+            <div class="card-tags">
+              <span class="tag ${acctTag}">${p.account}</span>
+              ${p.type==='option' ? '<span class="tag tag-opt">option</span>' : ''}
             </div>
           </div>
-          <div class="card-stats">
-            <div><div class="stat-label">Shares</div><div class="stat-val">${fmtSh(p)}</div></div>
-            <div><div class="stat-label">Cost basis</div><div class="stat-val">${p.type==='option'?fmt(p.costBasis)+' paid':fmt(p.costBasis)+' / sh'}</div></div>
-            <div><div class="stat-label">Current</div><div class="stat-val">${p.type==='option'?fmt(p.currentPrice):fmt(p.currentPrice)+' / sh'}</div></div>
-            <div><div class="stat-label">Total value</div><div class="stat-val">${fmt(val)}</div></div>
+          <div class="card-pnl">
+            <div class="pnl-val ${pc}">${fmtS(pnl)}</div>
+            <div class="pnl-pct ${pc}">${fmtP(pct)}</div>
           </div>
-          <div class="card-actions">
-            <div class="manual-row">
-              <input class="manual-input" type="number" step="0.01" placeholder="Update price $" id="mp-${idx}"/>
-              <button class="manual-btn" onclick="manualUp(${idx})">Update</button>
-            </div>
-            <button class="close-btn" onclick="closePos(${idx})">Mark closed</button>
-            <button class="remove-btn" onclick="removePos(${idx})">Remove</button>
+        </div>
+        <div class="card-stats">
+          <div><div class="stat-label">Shares</div><div class="stat-val">${fmtSh(p)}</div></div>
+          <div><div class="stat-label">Cost</div><div class="stat-val">${p.type==='option'?fmt(p.costBasis):fmt(p.costBasis)+'/sh'}</div></div>
+          <div><div class="stat-label">Price</div><div class="stat-val">${p.type==='option'?fmt(p.currentPrice):fmt(p.currentPrice)+'/sh'}</div></div>
+          <div><div class="stat-label">Value</div><div class="stat-val">${fmt(val)}</div></div>
+        </div>
+        <div class="card-actions">
+          <div class="manual-row">
+            <input class="manual-input" type="number" step="0.01" inputmode="decimal" placeholder="Manual price $" id="mp-${idx}"/>
+            <button class="manual-btn" onclick="manualUp(${idx})">Set</button>
           </div>
-        </div>`;
-      }).join('');
+          <button class="act-btn close" onclick="closePos(${idx})">Mark Closed</button>
+          <button class="act-btn remove" onclick="removePos(${idx})">Remove</button>
+        </div>
+      </div>`;
+    }).join('');
+  }
 
-  if (closed.length>0) {
-    document.getElementById('closed-wrap').style.display='block';
+  // Closed positions
+  if (closed.length > 0) {
+    document.getElementById('closed-wrap').style.display = 'block';
     document.getElementById('closed-list').innerHTML = closed.map(p => {
       const idx = positions.indexOf(p);
-      const inv = p.type==='option'?p.costBasis:p.shares*p.costBasis;
-      const val = p.closedPrice||p.currentPrice;
-      const pnl = val-inv; const pct=(pnl/inv)*100;
-      const pc = pnl>=0?'#3B6D11':'#A32D2D';
-      tInv+=inv; tVal+=val;
+      const inv = p.type==='option' ? p.costBasis : p.shares * p.costBasis;
+      const val = p.closedPrice || p.currentPrice;
+      const pnl = val - inv;
+      const pct = inv > 0 ? (pnl/inv)*100 : 0;
+      const pc = pnl>=0 ? 'pos' : 'neg';
+      tInv += inv; tVal += val;
       return `<div class="card closed-card">
         <div class="card-top">
           <div>
-            <div class="card-name">${p.name} <span style="font-size:12px;font-weight:400;color:#73726c">${p.ticker||'OPT'}</span><span class="tag ctag">closed ${p.closedDate||''}</span></div>
-            <div class="card-sub">${p.account} &middot; Added ${p.addedDate}</div>
+            <div class="card-ticker">${p.ticker||'OPT'}</div>
+            <div class="card-name">${p.name} <span style="font-size:10px;color:var(--muted)">closed ${p.closedDate||''}</span></div>
           </div>
-          <div style="text-align:right">
-            <div class="card-pnl-val" style="color:${pc}">${fmtS(pnl)}</div>
-            <div class="card-pnl-pct" style="color:${pc}">${fmtP(pct)}</div>
+          <div class="card-pnl">
+            <div class="pnl-val ${pc}">${fmtS(pnl)}</div>
+            <div class="pnl-pct ${pc}">${fmtP(pct)}</div>
           </div>
         </div>
         <div class="card-stats">
           <div><div class="stat-label">Invested</div><div class="stat-val">${fmt(inv)}</div></div>
           <div><div class="stat-label">Closed at</div><div class="stat-val">${fmt(val)}</div></div>
-          <div><div class="stat-label">P&L</div><div class="stat-val" style="color:${pc}">${fmtS(pnl)}</div></div>
-          <div><div class="stat-label">Return</div><div class="stat-val" style="color:${pc}">${fmtP(pct)}</div></div>
+          <div><div class="stat-label">P&L</div><div class="stat-val">${fmtS(pnl)}</div></div>
+          <div><div class="stat-label">Return</div><div class="stat-val">${fmtP(pct)}</div></div>
         </div>
-        <div class="card-actions"><button class="remove-btn" onclick="removePos(${idx})">Remove</button></div>
+        <div class="card-actions">
+          <button class="act-btn remove" onclick="removePos(${idx})">Remove</button>
+        </div>
       </div>`;
     }).join('');
   } else {
-    document.getElementById('closed-wrap').style.display='none';
+    document.getElementById('closed-wrap').style.display = 'none';
   }
 
-  const tp=tVal-tInv; const tpct=tInv>0?(tp/tInv)*100:0;
-  document.getElementById('t-inv').textContent=fmt(tInv);
-  document.getElementById('t-val').textContent=fmt(tVal);
-  document.getElementById('t-pnl').className='metric-val '+(tp>=0?'pos':'neg');
-  document.getElementById('t-pnl').textContent=fmtS(tp);
-  document.getElementById('t-pct').className='metric-val '+(tp>=0?'pos':'neg');
-  document.getElementById('t-pct').textContent=fmtP(tpct);
+  // Summary
+  const tp = tVal - tInv;
+  const tpct = tInv > 0 ? (tp/tInv)*100 : 0;
+  document.getElementById('t-inv').textContent = fmt(tInv);
+  document.getElementById('t-val').textContent = fmt(tVal);
+  const pnlEl = document.getElementById('t-pnl');
+  pnlEl.className = 'metric-val ' + (tp>=0?'pos':'neg');
+  pnlEl.textContent = fmtS(tp);
+  document.getElementById('t-pct').textContent = fmtP(tpct);
+  document.getElementById('t-count').textContent = open.length;
+  const accts = [...new Set(positions.filter(p=>!p.closed).map(p=>p.account))];
+  document.getElementById('t-accounts').textContent = accts.length > 0 ? accts.map(a => a==='Merrill Edge IRA'?'Merrill':a).join(' · ') : '—';
 }
 
+// ── Toggle closed ─────────────────────────────────────────
+function toggleClosed() {
+  closedOpen = !closedOpen;
+  document.getElementById('closed-list').style.display = closedOpen ? 'block' : 'none';
+  document.getElementById('closed-toggle').textContent = (closedOpen ? '▾' : '▸') + ' Closed Positions';
+}
+
+// ── Actions ───────────────────────────────────────────────
 function manualUp(idx) {
-  const v=parseFloat(document.getElementById('mp-'+idx).value);
-  if(isNaN(v)||v<=0)return;
-  positions[idx].currentPrice=v;
-  save(); renderAll();
+  const v = parseFloat(document.getElementById('mp-'+idx).value);
+  if (isNaN(v) || v <= 0) return;
+  positions[idx].currentPrice = v;
+  saveData();
 }
 
 function closePos(idx) {
-  const p=positions[idx];
-  const ps=prompt('Closing price for '+p.name+'?');
-  const pv=parseFloat(ps);
-  if(isNaN(pv)||pv<=0)return;
-  positions[idx].closed=true;
-  positions[idx].closedPrice=pv;
-  const now=new Date();
-  positions[idx].closedDate=now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-  save(); renderAll();
+  const p = positions[idx];
+  const ps = prompt('Closing price for ' + p.name + '?');
+  const pv = parseFloat(ps);
+  if (isNaN(pv) || pv <= 0) return;
+  positions[idx].closed = true;
+  positions[idx].closedPrice = pv;
+  const now = new Date();
+  positions[idx].closedDate = now.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
+  saveData();
 }
 
 function removePos(idx) {
-  if(!confirm('Remove '+positions[idx].name+'?'))return;
-  positions.splice(idx,1); save(); renderAll();
+  if (!confirm('Remove ' + positions[idx].name + '?')) return;
+  positions.splice(idx, 1);
+  saveData();
 }
 
 function addPos() {
-  const tick=document.getElementById('a-tick').value.trim().toUpperCase();
-  const name=document.getElementById('a-name').value.trim();
-  const shares=parseFloat(document.getElementById('a-shares').value);
-  const cost=parseFloat(document.getElementById('a-cost').value);
-  const acct=document.getElementById('a-acct').value;
-  const type=document.getElementById('a-type').value;
-  const err=document.getElementById('a-err');
-  if(!name){err.textContent='Enter a name.';err.style.display='block';return;}
-  if(isNaN(shares)||shares<=0){err.textContent='Enter valid shares.';err.style.display='block';return;}
-  if(isNaN(cost)||cost<=0){err.textContent='Enter valid cost.';err.style.display='block';return;}
-  err.style.display='none';
-  const now=new Date();
-  const ds=now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-  positions.push({id:'u'+Date.now(),name,ticker:type==='option'?null:tick,account:acct,shares,costBasis:cost,currentPrice:cost,type,addedDate:ds,closed:false});
-  save(); renderAll();
-  ['a-tick','a-name','a-shares','a-cost'].forEach(id=>document.getElementById(id).value='');
+  const tick   = document.getElementById('a-tick').value.trim().toUpperCase();
+  const name   = document.getElementById('a-name').value.trim();
+  const shares = parseFloat(document.getElementById('a-shares').value);
+  const cost   = parseFloat(document.getElementById('a-cost').value);
+  const acct   = document.getElementById('a-acct').value;
+  const type   = document.getElementById('a-type').value;
+  const err    = document.getElementById('a-err');
+  if (!name) { err.textContent='Enter a name.'; err.style.display='block'; return; }
+  if (isNaN(shares)||shares<=0) { err.textContent='Enter valid shares.'; err.style.display='block'; return; }
+  if (isNaN(cost)||cost<=0) { err.textContent='Enter valid cost.'; err.style.display='block'; return; }
+  err.style.display = 'none';
+  const now = new Date();
+  const ds = now.toLocaleDateString('en-US', {month:'short',day:'numeric',year:'numeric'});
+  positions.push({
+    id: 'u'+Date.now(), name,
+    ticker: type==='option' ? null : tick,
+    account: acct, shares, costBasis: cost,
+    currentPrice: cost, type, addedDate: ds, closed: false
+  });
+  ['a-tick','a-name','a-shares','a-cost'].forEach(id => document.getElementById(id).value = '');
+  saveData();
 }
 
+// ── Price fetch ───────────────────────────────────────────
 async function fetchFH(ticker) {
-  const r=await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${FH}`);
-  const d=await r.json();
-  if(!d?.c||d.c===0)throw new Error('No FH price');
-  return {price:d.c,source:'Finnhub'};
+  const r = await fetch(`https://finnhub.io/api/v1/quote?symbol=${ticker}&token=${FH}`);
+  const d = await r.json();
+  if (!d?.c || d.c === 0) throw new Error('No FH price');
+  return { price: d.c, source: 'Finnhub' };
 }
 
 async function fetchAV(ticker) {
-  const r=await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=${AV}`);
-  const d=await r.json();
-  if(d?.Information)throw new Error('AV limit');
-  const p=parseFloat(d?.['Global Quote']?.['05. price']);
-  if(isNaN(p))throw new Error('No AV price');
-  return {price:p,source:'Alpha Vantage'};
+  const r = await fetch(`https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${ticker}&apikey=${AV}`);
+  const d = await r.json();
+  if (d?.Information) throw new Error('AV limit');
+  const p = parseFloat(d?.['Global Quote']?.['05. price']);
+  if (isNaN(p)) throw new Error('No AV price');
+  return { price: p, source: 'Alpha Vantage' };
 }
 
 async function fetchPrice(ticker) {
   try { return await fetchFH(ticker); }
-  catch { try { return await fetchAV(ticker); } catch { throw new Error('Both failed: '+ticker); } }
+  catch { return await fetchAV(ticker); }
 }
 
 async function fetchAll() {
-  const btn=document.getElementById('rbtn');
-  const st=document.getElementById('stext');
-  const eb=document.getElementById('ebox');
-  btn.disabled=true; eb.style.display='none';
-  const stocks=positions.filter(p=>p.type==='stock'&&p.ticker&&!p.closed);
-  if(!stocks.length){st.textContent='No open stock positions.';btn.disabled=false;return;}
-  let failed=[],sources=new Set();
-  for(let i=0;i<stocks.length;i++){
-    const p=stocks[i];
-    st.textContent='Fetching '+p.ticker+'... ('+(i+1)+'/'+stocks.length+')';
-    try{
-      const {price,source}=await fetchPrice(p.ticker);
-      positions[positions.indexOf(p)].currentPrice=price;
+  const btn = document.getElementById('rbtn');
+  const st  = document.getElementById('stext');
+  const eb  = document.getElementById('ebox');
+  btn.disabled = true; eb.style.display = 'none';
+  const stocks = positions.filter(p => p.type==='stock' && p.ticker && !p.closed);
+  if (!stocks.length) { st.textContent='No open stock positions.'; btn.disabled=false; return; }
+  let failed=[], sources=new Set();
+  for (let i=0; i<stocks.length; i++) {
+    const p = stocks[i];
+    st.textContent = 'Fetching '+p.ticker+'… ('+(i+1)+'/'+stocks.length+')';
+    try {
+      const { price, source } = await fetchPrice(p.ticker);
+      positions[positions.indexOf(p)].currentPrice = price;
       sources.add(source);
     } catch { failed.push(p.ticker); }
   }
-  save(); renderAll();
-  const now=new Date();
-  st.textContent='Updated '+now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+' via '+[...sources].join(' + ');
-  document.getElementById('pos-label').textContent='Open positions — updated '+now.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'});
-  if(failed.length){eb.textContent='Could not fetch: '+failed.join(', ')+'. Update manually.';eb.style.display='block';}
-  btn.disabled=false;
+  await saveData();
+  const now = new Date();
+  st.textContent = 'Updated '+now.toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'})+' via '+[...sources].join(' + ');
+  if (failed.length) { eb.textContent='Could not fetch: '+failed.join(', ')+'. Update manually.'; eb.style.display='block'; }
+  btn.disabled = false;
 }
 
-renderAll();
+// ── Settings modal ────────────────────────────────────────
+function openSettings() {
+  const ts = document.getElementById('token-status');
+  if (hasToken()) {
+    ts.className = 'token-status ok';
+    ts.textContent = '✓ Token saved on this device';
+  } else {
+    ts.className = 'token-status missing';
+    ts.textContent = '✗ No token — add one to enable sync';
+  }
+  document.getElementById('token-input').value = '';
+  document.getElementById('modal').classList.add('open');
+}
+
+function closeSettings() {
+  document.getElementById('modal').classList.remove('open');
+}
+
+function saveToken() {
+  const val = document.getElementById('token-input').value.trim();
+  if (!val) { closeSettings(); return; }
+  localStorage.setItem(TOK_KEY, val);
+  closeSettings();
+  loadData();
+}
+
+// Close modal on overlay click
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeSettings();
+});
+
+// ── Init ──────────────────────────────────────────────────
+loadData();
 </script>
 </body>
 </html>

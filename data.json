@@ -1,0 +1,68 @@
+[
+  {
+    "id": "d3",
+    "name": "iShares Core S&P 500 ETF",
+    "ticker": "IVV",
+    "account": "Merrill Edge IRA",
+    "shares": 2,
+    "costBasis": 329.835,
+    "currentPrice": 329.835,
+    "type": "stock",
+    "addedDate": "Apr 7, 2026",
+    "closed": false
+  },
+  {
+    "id": "d4",
+    "name": "Invesco QQQ Trust",
+    "ticker": "QQQ",
+    "account": "Robinhood",
+    "shares": 0.342393,
+    "costBasis": 584.12,
+    "currentPrice": 584.12,
+    "type": "stock",
+    "addedDate": "Apr 7, 2026",
+    "closed": false
+  },
+  {
+    "id": "d1",
+    "name": "Delta Air Lines",
+    "ticker": "DAL",
+    "account": "Merrill Edge IRA",
+    "shares": 1,
+    "costBasis": 0,
+    "currentPrice": 10,
+    "type": "stock",
+    "addedDate": "Apr 7, 2026",
+    "closed": true,
+    "closedPrice": 10,
+    "closedDate": "Apr 8, 2026"
+  },
+  {
+    "id": "d2",
+    "name": "US Global Jets ETF",
+    "ticker": "JETS",
+    "account": "Merrill Edge IRA",
+    "shares": 1,
+    "costBasis": 0,
+    "currentPrice": 10,
+    "type": "stock",
+    "addedDate": "Apr 7, 2026",
+    "closed": true,
+    "closedPrice": 10,
+    "closedDate": "Apr 8, 2026"
+  },
+  {
+    "id": "d5",
+    "name": "CCL $27.50 Call 4/24",
+    "ticker": null,
+    "account": "Robinhood",
+    "shares": 1,
+    "costBasis": 48.00,
+    "currentPrice": 150.96,
+    "type": "option",
+    "addedDate": "Apr 7, 2026",
+    "closed": true,
+    "closedPrice": 150.96,
+    "closedDate": "Apr 8, 2026"
+  }
+]
