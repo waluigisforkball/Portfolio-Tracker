@@ -22,19 +22,5 @@
     "type": "stock",
     "addedDate": "Apr 7, 2026",
     "closed": false
-  },
-  {
-    "id": "d1",
-    "name": "Delta Air Lines",
-    "ticker": "DAL",
-    "account": "Merrill Edge IRA",
-    "shares": 1,
-    "costBasis": 0,
-    "currentPrice": 10,
-    "type": "stock",
-    "addedDate": "Apr 7, 2026",
-    "closed": true,
-    "closedPrice": 10,
-    "closedDate": "Apr 8, 2026"
   }
 ]
