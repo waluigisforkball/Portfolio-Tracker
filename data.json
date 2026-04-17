@@ -6,7 +6,7 @@
     "account": "Merrill Edge IRA",
     "shares": 2,
     "costBasis": 659.895,
-    "currentPrice": 704.76,
+    "currentPrice": 710.16,
     "type": "stock",
     "addedDate": "Apr 7, 2026",
     "closed": false
@@ -18,7 +18,7 @@
     "account": "Robinhood",
     "shares": 0.342393,
     "costBasis": 584.12,
-    "currentPrice": 640.41,
+    "currentPrice": 645.51,
     "type": "stock",
     "addedDate": "Apr 7, 2026",
     "closed": false
