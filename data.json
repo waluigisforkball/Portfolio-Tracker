@@ -22,5 +22,17 @@
     "type": "stock",
     "addedDate": "Apr 7, 2026",
     "closed": false
+  },
+  {
+    "id": "u1776440620493",
+    "name": "jets",
+    "ticker": null,
+    "account": "Robinhood",
+    "shares": 1,
+    "costBasis": 24,
+    "currentPrice": 24,
+    "type": "option",
+    "addedDate": "Apr 17, 2026",
+    "closed": false
   }
 ]
