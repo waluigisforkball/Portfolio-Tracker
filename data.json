@@ -22,5 +22,17 @@
     "type": "stock",
     "addedDate": "Apr 7, 2026",
     "closed": false
+  },
+  {
+    "id": "u1781800656169",
+    "name": "SpaceX",
+    "ticker": "SPCX",
+    "account": "Merrill Edge IRA",
+    "shares": 4,
+    "costBasis": 174,
+    "currentPrice": 174,
+    "type": "stock",
+    "addedDate": "Jun 18, 2026",
+    "closed": false
   }
 ]
